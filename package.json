@@ -1,14 +1,22 @@
 {
   "name": "snacks-api",
+  "jest": {
+    "setupTestFrameworkScriptFile": "./__tests__/support.js"
+  },
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "start": "node src/app.js",
+    "dev-server": "nodemon src/app.js",
     "knex": "knex",
-    "reboot": "npm run knex migrate:rollback && npm run knex migrate:latest && npm run knex seed: run",
-    "test": "jest"
+    "reboot": "npm run knex migrate:rollback && npm run knex migrate:latest && npm run knex seed:run",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run ",
+    "dev": "run-all \"npm run dev-server\"",
+    "test": "NODE_ENV=testing jest __tests__/**/*.test.js",
+    "coverage": "NODE_ENV=testing jest --coverage __tests__/**/*.test.js"
   },
   "keywords": [],
   "author": "Wendy Parsons",
