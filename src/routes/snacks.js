@@ -7,9 +7,9 @@ const { snacksController } = require('../controllers')
 
 router.get('/', snacksController.index) 
 
-// router.get('/:id', snacksController.show)
+router.get('/:id', snacksController.show)
 
-// router.post('/', snacksController.create)
+router.post('/', snacksController.create)
 
 // router.patch('/:id', snacksController.update)
 

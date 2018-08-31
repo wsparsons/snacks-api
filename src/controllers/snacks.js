@@ -17,15 +17,15 @@ function index(req, res, next) {
 		.catch(err => next(err))
 }
 
-// async function show(req, res, next) {
-// 	let data
-// 	snack.getSnackById(req.params.id)
-// 		.then(found => data = found)
-// 		.then(() => review.getSnackReviews(req.params.id))
-// 		.then(reviews => data.reviews = reviews)
-// 		.then(() => res.status(201).json({ data }))
-// 		.catch(err => next(err))
-// }
+async function show(req, res, next) {
+	let data
+	snack.getSnackById(req.params.id)
+		.then(found => data = found)
+		.then(() => review.getSnackReviews(req.params.id))
+		.then(reviews => data.reviews = reviews)
+		.then(() => res.status(201).json({ data }))
+		.catch(err => next(err))
+}
 
 // function featured(req, res, next) {
 // 	snack.getFeatured()
@@ -33,12 +33,12 @@ function index(req, res, next) {
 // 		.catch(err => next(err))		
 // }
 
-// function create(req, res, next) {
-// 	isValidSnackCreate(req.body)
-// 		.then(() => snack.create(req.body))
-// 		.then(data => res.status(201).json({ data }))    
-// 		.catch(err => next(err))    
-// }
+function create(req, res, next) {
+	isValidSnackCreate(req.body)
+		.then(() => snack.create(req.body))
+		.then(data => res.status(201).json({ data }))    
+		.catch(err => next(err))    
+}
 
 // function update(req, res, next) {
 // 	isValidSnackPatch(req.body)
@@ -55,5 +55,5 @@ function index(req, res, next) {
 // 		.catch(err => next(err)) 
 // }
 
-module.exports = { index }
+module.exports = { index, show, create }
 // module.exports = { index, show, featured, create, update, destroy }

@@ -5,14 +5,14 @@ const knex = require('knex')
 const config = require('../knexfile')[process.env.NODE_ENV]
 let connection = knex(config)
 
-// finds the connection and reseeding the db
+// finds the connection based on the environment, connect to that database and reseed the database
 beforeEach(() => {
   connection = knex(config)
   return connection.seed.run()
 })
 
-// destroying the connection with testing
+// After each example, destroy the knex connection pool, so that future tests can reconnect
 afterEach(() => connection.destroy())
 
-// destroying the connection to the db
+// After each example, destroy the database connection pool, so that future tests can reconnect
 afterAll(() => db.destroy())

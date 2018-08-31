@@ -15,8 +15,10 @@
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run ",
     "dev": "run-all \"npm run dev-server\"",
-    "test": "NODE_ENV=testing jest __tests__/**/*.test.js",
-    "coverage": "NODE_ENV=testing jest --coverage __tests__/**/*.test.js"
+    "test": "NODE_ENV=testing jest --runInBand __tests__/**/*.test.js",
+    "coverage": "NODE_ENV=testing jest --coverage --runInBand __tests__/**/*.test.js",
+    "testwatch": "NODE_ENV=testing jest --watchAll --runInBand __tests__/**/*.test.js",
+    "testwatchcoverage": "NODE_ENV=testing jest --coverage --watchAll --runInBand __tests__/**/*.test.js"
   },
   "keywords": [],
   "author": "Wendy Parsons",
