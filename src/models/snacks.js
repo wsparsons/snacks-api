@@ -1,12 +1,11 @@
 const knex = require('../db')
-const { isValidSnackCreate, isValidSnackPatch } = require('../middleware/bodyInspect')
 
 function index() {
 	return knex('snacks')
 }
 
 function getSnackById(id) {
-	if(!Number.isInteger(id)) return Promise.reject(new Error('snackNotFound'))
+	if(!Number.isInteger(id) || id < 0 || !id) return Promise.reject(new Error('snackNotFound'))
 
 	return knex('snacks')
 		.where({ id })
@@ -17,17 +16,17 @@ function getSnackById(id) {
 		})
 }
 
-// function getFeatured() {
-// 	return knex('snacks')
-// 		.then(snacks => {
-// 			const ids = [ generateRandomId(snacks.length), generateRandomId(snacks.length), generateRandomId(snacks.length) ]
-// 			return [ snacks[ids[0]], snacks[ids[1]], snacks[ids[2]] ]
-// 		})
-// }
+function getFeatured() {
+	return knex('snacks')
+		.then(snacks => {
+			const ids = [ generateRandomId(snacks.length), generateRandomId(snacks.length), generateRandomId(snacks.length) ]
+			return [ snacks[ids[0]], snacks[ids[1]], snacks[ids[2]] ]
+		})
+}
 
-// function generateRandomId(snackQty) {
-// 	return Math.ceil(Math.random() * snackQty)
-// }
+function generateRandomId(snackQty) {
+	return Math.ceil(Math.random() * snackQty)
+}
 
 function create(body){
 	
@@ -41,19 +40,26 @@ function create(body){
 		.returning(['*'])
 }
 
-// function update(id, body) {
-// 	return knex('snacks')
-// 		.where({ id })
-// 		.update( body )
-// 		.returning(['*'])   
-// }
+function update(id, body) {
+	const fields = [ 'name', 'description', 'price', 'img', 'is_perishable' ]
 
-// function destroy(id) {
-// 	return knex('snacks')
-// 		.where({ id })
-// 		.del()
-// 		.returning(['*'])
-// }
+	if(!Number.isInteger(id) || id < 0 || !id) return Promise.reject(new Error('snackNotFound'))
+	if(Object.keys(body).length === 0) return Promise.reject(new Error('aFieldRequired'))
+	if(!Object.keys(body).every(field => fields.includes(field))) return Promise.reject(new Error('aFieldRequired'))
 
-module.exports = { index, getSnackById, create } 
-// module.exports = { index, create, update, destroy, getSnackById, getFeatured } 
+	return knex('snacks')
+		.where({ id })
+		.update( body )
+		.returning(['*'])   
+}
+
+function destroy(id) {
+	if(!Number.isInteger(id) || id < 0 || !id) return Promise.reject(new Error('snackNotFound'))
+
+	return knex('snacks')
+		.where({ id })
+		.del()
+		.returning(['*'])
+}
+
+module.exports = { index, create, update, destroy, getSnackById, getFeatured } 
