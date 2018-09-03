@@ -18,7 +18,6 @@ function index(req, res, next) {
 }
 
 async function show(req, res, next) {
-	let data
 	snack.getSnackById(req.params.id)
 		.then(found => data = found)
 		.then(() => review.getSnackReviews(req.params.id))

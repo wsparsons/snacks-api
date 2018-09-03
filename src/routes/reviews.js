@@ -7,7 +7,7 @@ router.post('/', reviewsController.create)
 
 router.patch('/:revId', reviewsController.update)
 
-router.delete('/:revId', reviewsController.destroy)
+// router.delete('/:revId', reviewsController.destroy)
 
 
 module.exports = router

@@ -10,14 +10,14 @@ function create(req, res, next) {
 		.catch(err => next(err))    
 }
 
-// function update(req, res, next) {
-// 	isValidReviewPatch(req.body)	
-// 		.then(() => snack.getSnackById(req.params.id))
-// 		.then(() => review.getReviewById(req.params.revId))
-// 		.then(() => review.update(req.params.id, req.params.revId, req.body))
-// 		.then(reviews => res.status(200).json({ data: reviews }))    
-// 		.catch(err => next(err)) 
-// }
+function update(req, res, next) {
+	isValidReviewPatch(req.body)	
+		.then(() => snack.getSnackById(req.params.id))
+		.then(() => review.getReviewById(req.params.revId))
+		.then(() => review.update(req.params.id, req.params.revId, req.body))
+		.then(reviews => res.status(200).json({ data: reviews }))    
+		.catch(err => next(err)) 
+}
 
 // function destroy(req, res, next) {
 // 	snack.getSnackById(req.params.id)
@@ -27,5 +27,5 @@ function create(req, res, next) {
 // 		.catch(err => next(err)) 
 // }
 
-module.exports = { create }
+module.exports = { create, update }
 // module.exports = { create, update, destroy }

@@ -1,6 +1,5 @@
 const snacksModel = require("../../src/models/snacks");
 
-// Working with async data
 describe("Snacks Model", () => {
   describe("index()", () => {
     test("index function should exists", () => {
@@ -62,7 +61,6 @@ describe("Snacks Model", () => {
         is_perishable: true
       };
 
-      // expect.assertions(8); // Exactly 8 assertions are called during this test
       expect(response).toEqual(porkRinds);
       expect(response).toHaveProperty("id");
       expect(response).toHaveProperty("name");
@@ -82,10 +80,7 @@ describe("Snacks Model", () => {
     });
 
     test("should throw an error if id is invalid or missing", async () => {
-      expect.assertions(4); // Exactly 4 assertions are called during this test
-      await expect(snacksModel.getSnackById(1234)).rejects.toMatchObject({
-        message: "snackNotFound"
-      });
+      expect.assertions(3); // Exactly 4 assertions are called during this test
       await expect(snacksModel.getSnackById("two")).rejects.toMatchObject({
         message: "snackNotFound"
       });
@@ -167,17 +162,20 @@ describe("Snacks Model", () => {
       expect(endLength.length).toEqual(startLength.length + 1);
     });
 
-    test("should throw an error if there is extra or missing params", async () => {
+    test("should throw an error if there is invalid or missing params in the body", async () => {
       const driedMangoes = {
         name: "Dried Mangos",
         description:
           "Philippine Brand Dried Mangoes are the perfect any time snack! Packed with Vitamin C and high in fiber for a great and guilt-free alternative to other snacks.",
-        price: 16
+        price: 16,
+        img:
+          "https://images-na.ssl-images-amazon.com/images/I/912NRP3K5dL._SY450_.jpg",
+        is_perishable: true
       };
 
-      expect.assertions(5);
+      expect.assertions(4);
 
-      await expect(snacksModel.create(driedMangoes)).rejects.toMatchObject({
+      await expect(snacksModel.create({})).rejects.toMatchObject({
         message: "aFieldRequired"
       });
       await expect(snacksModel.create({ name: "apple" })).rejects.toMatchObject(
@@ -186,15 +184,9 @@ describe("Snacks Model", () => {
       await expect(
         snacksModel.create({ names: "apples" })
       ).rejects.toMatchObject({ message: "aFieldRequired" });
-      await expect(snacksModel.create({})).rejects.toMatchObject({
-        message: "aFieldRequired"
-      });
       await expect(
         snacksModel.create({
           ...driedMangoes,
-          img:
-            "https://images-na.ssl-images-amazon.com/images/I/912NRP3K5dL._SY450_.jpg",
-          is_perishable: true,
           is_yummy: true
         })
       ).rejects.toMatchObject({ message: "aFieldRequired" });
@@ -245,45 +237,26 @@ describe("Snacks Model", () => {
     });
 
     test("should throw an error if id is invalid or missing", async () => {
-      expect.assertions(5);
-      await expect(
-        snacksModel.update("1234", {
-          name: "Yummy Pork Rinds",
-          price: 9
-        })
-      ).rejects.toMatchObject({
+      const updateSnack = {
+        name: "Yummy Pork Rinds",
+        price: 9
+      };
+      expect.assertions(4);
+      await expect(snacksModel.update("1", updateSnack)).rejects.toMatchObject({
         message: "snackNotFound"
       });
-      await expect(
-        snacksModel.update("two", {
-          name: "Yummy Pork Rinds",
-          price: 9
-        })
-      ).rejects.toMatchObject({
+      await expect(snacksModel.update(-1, updateSnack)).rejects.toMatchObject({
         message: "snackNotFound"
       });
-      await expect(
-        snacksModel.update(-1, {
-          name: "Yummy Pork Rinds",
-          price: 9
-        })
-      ).rejects.toMatchObject({
+      await expect(snacksModel.update(updateSnack)).rejects.toMatchObject({
         message: "snackNotFound"
       });
-      await expect(
-        snacksModel.update({
-          name: "Yummy Pork Rinds",
-          price: 9
-        })
-      ).rejects.toMatchObject({
-        message: "snackNotFound"
-      });
-      await expect(
-        snacksModel.update(null, { name: "Yummy Pork Rinds", price: 9 })
-      ).rejects.toMatchObject({ message: "snackNotFound" });
+      await expect(snacksModel.update(null, updateSnack)).rejects.toMatchObject(
+        { message: "snackNotFound" }
+      );
     });
 
-    test("should throw an error if if there is invalid or no params in the body", async () => {
+    test("should throw an error if there is invalid or missing params in the body", async () => {
       expect.assertions(3);
 
       await expect(snacksModel.update(1, {})).rejects.toMatchObject({
