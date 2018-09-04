@@ -1,18 +1,21 @@
-# sude: false
+sude: false
 
-# language: node_js
+language: node_js
 
-# node_js:
-#   - "node"
+node_js:
+  - "node"
 
-# script:
-#   - npm test
-#   - npm run coverage
-#   - npm run reboot
+before_script: 
+  - psql -c 'create database snacks_test;' -U postgres
 
-# services:
-#   -
 
-# env:
-#   - NODE_ENV="development";
-#   - NODE_ENV="testing";
+script:
+  - npm test
+  - npm run coverage
+  - npm run reboot
+
+services:
+  -postgresql 
+
+env:
+  - NODE_ENV="testing"
