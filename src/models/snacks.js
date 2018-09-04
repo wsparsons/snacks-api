@@ -64,7 +64,7 @@ function update(id, body) {
 function destroy(id) {
   if (!Number.isInteger(id) || id < 0 || !id)
     return Promise.reject(new Error("snackNotFound"));
-
+	
   return knex("snacks")
     .where({ id })
     .del()

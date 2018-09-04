@@ -153,4 +153,136 @@ describe("Reviews Model", () => {
       });
     });
   });
+
+  describe("update()", () => {
+    test("update function should exist", () => {
+      expect(reviewsModel.update).toBeDefined();
+    });
+
+    test("should update the review with given params", async () => {
+      const response = await reviewsModel.update(1, {
+        title: "Yummy!",
+        rating: 5
+      });
+
+      const updatedReview = {
+        id: 1,
+        title: "Yummy!",
+        text:
+          "If it were a person I'd say to it: Is your name Dan Druff? You get into people's hair. I mean like, I'd say that you're funny but looks aren't everything.",
+        rating: 5,
+        snack_id: 1
+      };
+
+      expect(response).toBeInstanceOf(Array);
+      expect(response[0]).toBeInstanceOf(Object);
+      expect(response[0]).toHaveProperty("id");
+      expect(response[0]).toHaveProperty("title");
+      expect(response[0]).toHaveProperty("text");
+      expect(response[0]).toHaveProperty("rating");
+      expect(response[0]).toHaveProperty("snack_id");
+      expect(response[0]).toMatchObject(updatedReview);
+      expect(response[0]).toMatchObject({
+        id: expect.any(Number),
+        title: expect.any(String),
+        text: expect.any(String),
+        rating: expect.any(Number),
+        snack_id: expect.any(Number)
+      });
+      expect(response[0].title).toEqual("Yummy!");
+      expect(response[0].rating).toEqual(5);
+    });
+
+    test("should throw an error if id is invalid or missing", async () => {
+      const updateReview = {
+        title: "Yummy!",
+        rating: 5
+      };
+
+      expect.assertions(4);
+      await expect(
+        reviewsModel.update("1", updateReview)
+      ).rejects.toMatchObject({
+        message: "reviewNotFound"
+      });
+      await expect(reviewsModel.update(-1, updateReview)).rejects.toMatchObject(
+        {
+          message: "reviewNotFound"
+        }
+      );
+      await expect(reviewsModel.update(updateReview)).rejects.toMatchObject({
+        message: "reviewNotFound"
+      });
+      await expect(
+        reviewsModel.update(null, updateReview)
+      ).rejects.toMatchObject({ message: "reviewNotFound" });
+    });
+
+    test("should throw an error if there is invalid or missing params in the body", async () => {
+      expect.assertions(3);
+
+      await expect(reviewsModel.update(1, {})).rejects.toMatchObject({
+        message: "aReviewFieldRequired"
+      });
+      await expect(
+        reviewsModel.update(1, { titles: "Incredible!" })
+      ).rejects.toMatchObject({
+        message: "aReviewFieldRequired"
+      });
+      await expect(
+        reviewsModel.update(1, {
+          title: "Incredible!",
+          text:
+            "If it were a person I'd say to it: Is your name Dan Druff? You get into people's hair. I mean like, I'd say that you're funny but looks aren't everything.",
+          rating: 1,
+          yummy: 5
+        })
+      ).rejects.toMatchObject({
+        message: "aReviewFieldRequired"
+      });
+    });
+  });
+
+  describe("destroy()", () => {
+    test("destroy function should exists", () => {
+      expect(reviewsModel.destroy).toBeDefined();
+    });
+
+    test("should delete a snack when given an id", async () => {
+      const startLength = await reviewsModel.getSnackReviews(1);
+      const response = await reviewsModel.destroy(1);
+      const endLength = await reviewsModel.getSnackReviews(1);
+      const delReview = {
+        id: 1,
+        title: "Incredible!",
+        text:
+          "If it were a person I'd say to it: Is your name Dan Druff? You get into people's hair. I mean like, I'd say that you're funny but looks aren't everything.",
+        rating: 1,
+        snack_id: 1
+      };
+      expect(endLength.length).toEqual(startLength.length - 1);
+      expect(response[0]).toEqual(delReview);
+      expect(response[0]).toMatchObject(delReview);
+      expect(response[0]).toMatchObject({
+        id: expect.any(Number),
+        title: expect.any(String),
+        text: expect.any(String),
+        rating: expect.any(Number),
+        snack_id: expect.any(Number)
+      });
+    });
+
+    test("should throw an error if id is invalid or missing", async () => {
+      expect.assertions(3);
+      await expect(reviewsModel.destroy("two")).rejects.toMatchObject({
+        message: "reviewNotFound"
+      });
+      await expect(reviewsModel.destroy(-1)).rejects.toMatchObject({
+        message: "reviewNotFound"
+      });
+      await expect(reviewsModel.destroy()).rejects.toMatchObject({
+        message: "reviewNotFound"
+      });
+    });
+  });
 });

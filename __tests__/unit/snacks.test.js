@@ -45,6 +45,7 @@ describe("Snacks Model", () => {
 
     test("should return an object ", async () => {
       const response = await snacksModel.getSnackById(1);
+      
       expect(response).toBeInstanceOf(Object);
     });
 
@@ -80,7 +81,7 @@ describe("Snacks Model", () => {
     });
 
     test("should throw an error if id is invalid or missing", async () => {
-      expect.assertions(3); // Exactly 4 assertions are called during this test
+      expect.assertions(4); // Exactly 4 assertions are called during this test
       await expect(snacksModel.getSnackById("two")).rejects.toMatchObject({
         message: "snackNotFound"
       });
@@ -88,6 +89,9 @@ describe("Snacks Model", () => {
         message: "snackNotFound"
       });
       await expect(snacksModel.getSnackById()).rejects.toMatchObject({
+        message: "snackNotFound"
+      });
+      await expect(snacksModel.getSnackById(40000)).rejects.toMatchObject({
         message: "snackNotFound"
       });
     });
