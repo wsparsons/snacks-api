@@ -11,7 +11,7 @@ describe("Reviews Model", () => {
       expect(response).toBeInstanceOf(Array);
     });
 
-    test("should throw an error if id is invalid or missing", async () => {
+    test("should return an error if id is invalid or missing", async () => {
       expect.assertions(3);
       await expect(reviewsModel.getSnackReviews()).rejects.toMatchObject({
         message: "reviewNotFound"
@@ -61,7 +61,7 @@ describe("Reviews Model", () => {
       });
     });
 
-    test("should throw an error if id is invalid or missing", async () => {
+    test("should return an error if id is invalid or missing", async () => {
       expect.assertions(3);
       await expect(reviewsModel.getReviewById()).rejects.toMatchObject({
         message: "reviewNotFound"
@@ -106,7 +106,7 @@ describe("Reviews Model", () => {
       });
     });
 
-    test("should throw an error if snack id is invalid or missing", async () => {
+    test("should return an error if snack id is invalid or missing", async () => {
       const newReview = {
         title: "Yummy!",
         text: "This snack was supercalifragilisticexpialidocious.",
@@ -127,7 +127,7 @@ describe("Reviews Model", () => {
       });
     });
 
-    test("should throw an error if there is invalid or missing params in the body", async () => {
+    test("should return an error if there is invalid or missing params in the body", async () => {
       const newReview = {
         title: "Yummy!",
         text: "This snack was supercalifragilisticexpialidocious.",
@@ -193,7 +193,7 @@ describe("Reviews Model", () => {
       expect(response[0].rating).toEqual(5);
     });
 
-    test("should throw an error if id is invalid or missing", async () => {
+    test("should return an error if id is invalid or missing", async () => {
       const updateReview = {
         title: "Yummy!",
         rating: 5
@@ -218,7 +218,7 @@ describe("Reviews Model", () => {
       ).rejects.toMatchObject({ message: "reviewNotFound" });
     });
 
-    test("should throw an error if there is invalid or missing params in the body", async () => {
+    test("should return an error if there is invalid or missing params in the body", async () => {
       expect.assertions(3);
 
       await expect(reviewsModel.update(1, {})).rejects.toMatchObject({
@@ -248,7 +248,7 @@ describe("Reviews Model", () => {
       expect(reviewsModel.destroy).toBeDefined();
     });
 
-    test("should delete a snack when given an id", async () => {
+    test("should delete a specific snack review when given a revId", async () => {
       const startLength = await reviewsModel.getSnackReviews(1);
       const response = await reviewsModel.destroy(1);
       const endLength = await reviewsModel.getSnackReviews(1);
@@ -272,7 +272,7 @@ describe("Reviews Model", () => {
       });
     });
 
-    test("should throw an error if id is invalid or missing", async () => {
+    test("should return an error if revId is invalid or missing", async () => {
       expect.assertions(3);
       await expect(reviewsModel.destroy("two")).rejects.toMatchObject({
         message: "reviewNotFound"
