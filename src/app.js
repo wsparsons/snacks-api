@@ -30,7 +30,7 @@ app.use((req, res) => {
 // ERROR HANDLING
 app.use((err, req, res, next) => {
   err = processErrorMessage(err)
-  if (process.env.NODE_ENV !== 'test') console.error(err)
+  if (process.env.NODE_ENV !== 'testing') console.error(err)
   const { status, message } = err
   res.status(status).json({ status, message })
 })

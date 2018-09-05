@@ -80,7 +80,7 @@ describe("Snacks Model", () => {
       });
     });
 
-    test("should throw an error if id is invalid or missing", async () => {
+    test("should return an error if id is invalid or missing", async () => {
       expect.assertions(4); // Exactly 4 assertions are called during this test
       await expect(snacksModel.getSnackById("two")).rejects.toMatchObject({
         message: "snackNotFound"
@@ -133,7 +133,7 @@ describe("Snacks Model", () => {
     test("should create a new snack", async () => {
       const startLength = await snacksModel.index();
       const driedMangoes = {
-        name: "Dried Mangos",
+        name: "Dried Mangoes",
         description:
           "Philippine Brand Dried Mangoes are the perfect any time snack! Packed with Vitamin C and high in fiber for a great and guilt-free alternative to other snacks.",
         price: 16,
@@ -164,9 +164,9 @@ describe("Snacks Model", () => {
       expect(endLength.length).toEqual(startLength.length + 1);
     });
 
-    test("should throw an error if there is invalid or missing params in the body", async () => {
+    test("should return an error if there is invalid or missing params in the body", async () => {
       const driedMangoes = {
-        name: "Dried Mangos",
+        name: "Dried Mangoes",
         description:
           "Philippine Brand Dried Mangoes are the perfect any time snack! Packed with Vitamin C and high in fiber for a great and guilt-free alternative to other snacks.",
         price: 16,
@@ -238,7 +238,7 @@ describe("Snacks Model", () => {
       expect(response[0].price).toEqual(9);
     });
 
-    test("should throw an error if id is invalid or missing", async () => {
+    test("should return an error if id is invalid or missing", async () => {
       const updateSnack = {
         name: "Yummy Pork Rinds",
         price: 9
@@ -258,7 +258,7 @@ describe("Snacks Model", () => {
       );
     });
 
-    test("should throw an error if there is invalid or missing params in the body", async () => {
+    test("should return an error if there is invalid or missing params in the body", async () => {
       expect.assertions(3);
 
       await expect(snacksModel.update(1, {})).rejects.toMatchObject({
@@ -319,7 +319,7 @@ describe("Snacks Model", () => {
       });
     });
 
-    test("should throw an error if id is invalid or missing", async () => {
+    test("should return an error if id is invalid or missing", async () => {
       expect.assertions(3);
       await expect(snacksModel.destroy("two")).rejects.toMatchObject({
         message: "snackNotFound"
