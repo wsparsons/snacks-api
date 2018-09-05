@@ -10,7 +10,7 @@ before_script:
 
 script:
   - npm run reboot
-  - npm test
+  # - npm test
   - npm run coverage
 
 services:

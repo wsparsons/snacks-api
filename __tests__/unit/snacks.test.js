@@ -45,7 +45,7 @@ describe("Snacks Model", () => {
 
     test("should return an object ", async () => {
       const response = await snacksModel.getSnackById(1);
-      
+
       expect(response).toBeInstanceOf(Object);
     });
 
@@ -132,7 +132,6 @@ describe("Snacks Model", () => {
 
     test("should create a new snack", async () => {
       const startLength = await snacksModel.index();
-
       const driedMangoes = {
         name: "Dried Mangos",
         description:
@@ -142,7 +141,6 @@ describe("Snacks Model", () => {
           "https://images-na.ssl-images-amazon.com/images/I/912NRP3K5dL._SY450_.jpg",
         is_perishable: true
       };
-
       const response = await snacksModel.create(driedMangoes);
       const endLength = await snacksModel.index();
 
