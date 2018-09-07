@@ -139,15 +139,51 @@ describe("/api/snacks", () => {
         is_perishable: true,
         is_yummy: true
       };
-      const response = await request(app)
-        .post(`/api/snacks`)
-        .send(driedMangoes);
 
-      expect(response.status).toBe(400);
-      expect(response.body).toMatchObject({
+      const responseTitle = await request(app)
+        .post(`/api/snacks`)
+        .send({ ...driedMangoes, name: null });
+      expect(responseTitle.status).toBe(400);
+      expect(responseTitle.body).toMatchObject({
+        status: 400,
+        message: 'Snack "name" must be a String and is required'
+      });
+
+      const responseDescription = await request(app)
+        .post(`/api/snacks`)
+        .send({ ...driedMangoes, description: null });
+      expect(responseDescription.status).toBe(400);
+      expect(responseDescription.body).toMatchObject({
+        status: 400,
+        message: 'Snack "description" must be a String and is required'
+      });
+
+      const responsePrice = await request(app)
+        .post(`/api/snacks`)
+        .send({ ...driedMangoes, price: null });
+      expect(responsePrice.status).toBe(400);
+      expect(responsePrice.body).toMatchObject({
         status: 400,
         message:
-          'At lease one(1) of the following fields is required: "name", "description", "price", "img", or "is_perishable"'
+          'Snack "price" must be an Integer (whole number, no Floats) and is required'
+      });
+
+      const responseImg = await request(app)
+        .post(`/api/snacks`)
+        .send({ ...driedMangoes, img: null });
+      expect(responseImg.status).toBe(400);
+      expect(responseImg.body).toMatchObject({
+        status: 400,
+        message: 'Snack "img" must be a String and is required'
+      });
+
+      const responsePerishable = await request(app)
+        .post(`/api/snacks`)
+        .send({ ...driedMangoes, is_perishable: null });
+      expect(responsePerishable.status).toBe(400);
+      expect(responsePerishable.body).toMatchObject({
+        status: 400,
+        message: 'Snack "is_perishable" must be a Boolean and is required'
       });
     });
   });
@@ -221,17 +257,16 @@ describe("/api/snacks", () => {
       const response = await request(app)
         .patch(`/api/snacks/1`)
         .send({
-          names: "Yummy Pork Rinds",
+          names: "Yummy Pork Rinds"
         });
-      
+
       expect(response.status).toBe(400);
       expect(response.body).toMatchObject({
         status: 400,
         message:
           'At lease one(1) of the following fields is required: "name", "description", "price", "img", or "is_perishable"'
-      });     
-      
-    })
+      });
+    });
   });
 
   describe("DELETE api/snacks/:id", () => {
